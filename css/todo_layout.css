@@ -1,0 +1,14 @@
+#todo_list_item_form
+{
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-gap: 16px;
+}
+
+#todo_item_prompt {
+    grid-column: 1 / 2;
+}
+ 
+#todo_item_input {
+    grid-column: 2 / 3;
+}
