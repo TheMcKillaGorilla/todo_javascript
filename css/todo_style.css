@@ -1,0 +1,82 @@
+body {
+    /* 
+        FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
+        COLORS THAT WE'LL USE TOGETHER IN MULTIPLE PLACES THAT
+        TOGETHER WILL MAKE UP A GIVEN THEME
+    */
+    --swatch-neutral:        #E6E6E6;
+    --swatch-primary-up:     #A8C0AD;
+    --swatch-primary:        #C9E0CD;
+    --swatch-primary-down:   #E9E0ED;
+    --swatch-complement:     #E1E4CB;
+    --swatch-accent:         #227722;
+    --swatch-bright-accent:  #d84533;
+    
+    --font-family: "Roboto";
+}
+
+/* NAVIGATION BAR CONTROLS */
+/*  #top_toolbar and its buttons */
+
+#top_toolbar {
+    display: flex;
+}
+
+.top_sub_toolbar {
+    background-color:   var(--swatch-primary);
+    border-color:       var(--swatch-accent);
+    border-width:       12px 12px 12px 12px;
+    border-radius:      15px;
+    padding: 5px 10px 5px 10px;
+}
+
+.top_sub_toolbar>button {
+    width: 36px;
+    height: 36px;
+}
+
+#home_button {
+    background-image: url('../images/icons/Home.png');
+}
+
+#new_button {
+    background-image: url('../images/icons/New.png');
+}
+
+#undo_button {
+    background-image: url('../images/icons/Undo.png');
+}
+
+#redo_button {
+    background-image: url('../images/icons/Redo.png');
+}
+
+#cut_button {
+    background-image: url('../images/icons/Cut.png');
+}
+
+#copy_button {
+    background-image: url('../images/icons/Copy.png');
+}
+
+#paste_button {
+    background-image: url('../images/icons/Paste.png');
+}
+
+/* ? */
+#list_heading {
+    font-size: 36pt;
+}
+
+.list_item_card {
+    display: grid;
+    height: 100px;
+    width: 500px;
+    background-color: var(--swatch-bright-accent);
+    border-radius: 25px;
+}
+
+.list_item_card_heading {
+    font-weight: bold;
+    font-size: 16pt;
+}

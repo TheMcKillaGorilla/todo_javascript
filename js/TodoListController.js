@@ -2,42 +2,28 @@
 
 class TodoListController
 {
-    constructor() {
-
-    }
-
-    showElement(elementId, show) {
-        let element = document.getElementById(elementId);
-        element.hidden = !show;
-        
-        // @todo DISABLE THE BUTTON AS WELL
+    constructor(initModel) {
+        this.model = initModel;
     }
 
     processHomeRequest() {
-        // THIS COULD HAPPEN ANYWHERE SO HIDE ALL THE OTHERS
-        this.showElement("todo_list", false);
-        this.showElement("todo_list_item", false);
-
-        // AND GO HOME
-        this.showElement("todo_home", true);
+        this.model.goHome();
     }
 
     processNewListRequest() {
-        this.editListItemId = null;
+        // CHANGE THE SCREEN
+        this.model.goList();
 
-        // THIS COULD ONLY HAVE OCCURED FROM HOME SO HIDE HOME
-        this.showElement("todo_home", false);
-
-        // AND SHOW EDIT
-        this.showElement("todo_list", true);   
+        // MAKE A BRAND NEW LIST
+        this.model.loadNewList();
     }
 
-    processEditListRequest(listItemId) {
-        this.editListItemId = listItemId;
+    processEditListRequest(listName) {
+        // CHANGE THE SCREEN
+        this.model.goList();
 
-        // GET THE LIST ITEM
-
-        // LOAD ALL THE LIST ITEM DATA INTO THE EDIT CONTROLS
+        // LOAD THE SELECTED LIST
+        this.model.loadList(listName);
     }
 
     processRemoveListRequest(listItemId) {
@@ -51,8 +37,8 @@ class TodoListController
     processNewItemRequest() {
         // THIS COULD ONLY HAVE OCCURED FROM TODO LIST SO HIDE IT
         // AND SHOW LIST ITEM
-        this.showElement("todo_list", false);
-        this.showElement("todo_list_item", true);
+        this.showElementWithId("todo_list", false);
+        this.showElementWithId("todo_list_item", true);
     }
 
     processSubmitItemChanges() {
@@ -64,12 +50,16 @@ class TodoListController
         else {
             
         }
-        this.showElement("todo_list_item", false);
-        this.showElement("todo_list", true);
+        this.showElementWithId("todo_list_item", false);
+        this.showElementWithId("todo_list", true);
     }
 
     processCancelItemChanges() {
-        this.showElement("todo_list_item", false);
-        this.showElement("todo_list", true);
+        this.showElementWithId("todo_list_item", false);
+        this.showElementWithId("todo_list", true);
+    }
+
+    displayListItems() {
+        let listItemsList = document.getElementById("list_items_list");
     }
 }

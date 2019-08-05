@@ -4,50 +4,94 @@
 <head>
     <title>@todo - The Todo List Manager</title>
     <link rel="stylesheet" type="text/css" href="./css/todo_layout.css" />
-    <link rel="stylesheet" type="text/css" href="./css/new_york_yankees.css" />
+    <link rel="stylesheet" type="text/css" href="./css/todo_style.css" />
 
-    <script src="./js/TodoListData.js"></script>
+    <script src="./js/TodoList.js"></script>
     <script src="./js/TodoListController.js"></script>
+    <script src="./js/TodoListItem.js"></script>
+    <script src="./js/TodoListModel.js"></script>
+    <script src="./js/TodoListView.js"></script>
+
+    <!-- FOR TESTING OUR TODO LISTS -->
+    <script src="./test/TodoListTester.js"></script>
 
     <script>
-        window.onload = function() 
-        {
-            window.todo = new TodoListData();
-            window.todo.controller = new TodoListController();
+        window.onload = function () {
+            window.todo = new TodoList();
+            window.todo.view = new TodoListView();
+            window.todo.model = new TodoListModel(window.todo.view);
+            window.todo.controller = new TodoListController(window.todo.model);
+            window.todoListTester = new TodoListTester();
+            window.todoListTester.runTests()
         }
     </script>
 </head>
 
 <body>
-    <div id="todo_banner">@todo</div>
-
-    <div id="todo_toolbar">
-        <button id="home_button" onclick=window.todo.controller.processHomeRequest()>Home</button>
-        <button id="new_button" onclick=window.todo.controller.processNewListRequest()>New</button>
-        <button id="undo_button" onclick=window.todo.controller.processUndoRequest()>Undo</button>
-        <button id="redo_button" onclick=window.todo.controller.processRedoRequest()>Redo</button>
+    <div id="todo_home">
+        <div id="recent_work_container">
+            <h3 id="your_lists_heading">Your Lists</h3>
+            <div id="your_list_list"></div>
+        </div>
+        <div id="banner_image_container">
+            <img id="banner_image" src="images/ToDoListMakerWebBanner.png" />
+        </div>
+        <div id="new_list_button_container">
+            <button id="new_todo_list_button" onclick=window.todo.controller.processNewListRequest()>Create a New To Do
+                List</button>
+        </div>
     </div>
 
-    <div id="todo_home">
-        <h3 id="lists_heading">Lists</h3>
-        <div id="todo_lists"></div>
+    <div id="top_toolbar" hidden>
+        <div id="file_toolbar" class="top_sub_toolbar">
+            <button id="home_button" onclick=window.todo.controller.processHomeRequest()></button>
+            <button id="new_button" onclick=window.todo.controller.processNewListRequest()></button>
+            <button id="undo_button" onclick=window.todo.controller.processUndoRequest()></button>
+            <button id="redo_button" onclick=window.todo.controller.processRedoRequest()></button>
+        </div>
+        <div id="cut_toolbar" class="top_sub_toolbar">
+            <button id="cut_button" onclick=window.todo.controller.processCutRequest()></button>
+            <button id="copy_button" onclick=window.todo.controller.processCopyRequest()></button>
+            <button id="paste_button" onclick=window.todo.controller.processPasteRequest()></button>
+        </div>
+        <div id="undo_toolbar" class="top_sub_toolbar">
+            <button id="undo_button" onclick=window.todo.controller.processUndoRequest()></button>
+            <button id="redo_button" onclick=window.todo.controller.processRedoRequest()></button>
+        </div>
     </div>
 
     <div id="todo_list" hidden>
-        <div id="list_heading"><span id="list_name_prompt">List Name:</span> <input id="list_name_input" /></div>
+        <div id="list_heading">@todo</div>
+        <div id="name_author_toolbar">
+            <div class="text_toolbar">
+                <span id="list_name_prompt">Name:</span>
+                <input id="list_name_input" />
+            </div>
+            <div class="text_toolbar">
+                <span id="list_owner_prompt">Owner:</span>
+                <input id="list_owner_input" />
+            </div>
+        </div>
         <div id="list_items_toolbar">
             <button id="new_item_button" onclick=window.todo.controller.processNewItemRequest()>+</button>
+            <button id="remove_item_button" onclick=window.todo.controller.processRemoveItemRequest()>-</button>
+            <button id="edit_item_button" onclick=window.todo.controller.processEditItemRequest()>...</button>
+            <button id="move_up_item_button" onclick=window.todo.controller.processMoveUpItemRequest()>Up</button>
+            <button id="move_down_item_button" onclick=window.todo.controller.processMoveDownItemRequest()>Down</button>
         </div>
-        <div id="list_items"></div>
+        <div id="list_items_list"></div>
     </div>
 
     <div id="todo_list_item" hidden>
         <h3 id="item_heading">Item</h3>
         <div id="todo_list_item_form">
-        <div class="todo_item_prompt">Name:</div><input id="item_name" class="todo_item_input" type="input" />
-        <div class="todo_item_prompt">Assigned To:</div><input id="item_assigned_to" class="todo_item_input" type="input" />
-        <div class="todo_item_prompt">Due Date:</div><input id="item_due_date" class="todo_item_input" type="date" />
-        <div class="todo_item_prompt">Description:</div><input id="item_description" class="todo_item_input" type="input" />
+            <div class="todo_item_prompt">Name:</div><input id="item_name" class="todo_item_input" type="input" />
+            <div class="todo_item_prompt">Assigned To:</div><input id="item_assigned_to" class="todo_item_input"
+                type="input" />
+            <div class="todo_item_prompt">Due Date:</div><input id="item_due_date" class="todo_item_input"
+                type="date" />
+            <div class="todo_item_prompt">Description:</div><input id="item_description" class="todo_item_input"
+                type="input" />
         </div>
         <button id="todo_item_submit_button" onclick=window.todo.controller.processSubmitItemChanges()>Submit</button>
         <button id="todo_item_cancel_button" onclick=window.todo.controller.processCancelItemChanges()>Cancel</button>
