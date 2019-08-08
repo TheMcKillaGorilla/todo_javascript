@@ -1,7 +1,6 @@
 'use strict'
 
-class TodoListController
-{
+class TodoListController {
     constructor(initModel) {
         this.model = initModel;
     }
@@ -11,19 +10,19 @@ class TodoListController
     }
 
     processNewListRequest() {
-        // CHANGE THE SCREEN
-        this.model.goList();
-
         // MAKE A BRAND NEW LIST
         this.model.loadNewList();
+
+        // CHANGE THE SCREEN
+        this.model.goList();
     }
 
     processEditListRequest(listName) {
-        // CHANGE THE SCREEN
-        this.model.goList();
-
         // LOAD THE SELECTED LIST
         this.model.loadList(listName);
+
+        // CHANGE THE SCREEN
+        this.model.goList();
     }
 
     processRemoveListRequest(listItemId) {
@@ -35,31 +34,54 @@ class TodoListController
     }
 
     processNewItemRequest() {
-        // THIS COULD ONLY HAVE OCCURED FROM TODO LIST SO HIDE IT
-        // AND SHOW LIST ITEM
-        this.showElementWithId("todo_list", false);
-        this.showElementWithId("todo_list_item", true);
+        this.model.loadNewItem();
+        this.model.goItem();
     }
 
-    processSubmitItemChanges() {
-        // IS THIS A NEW LIST ITEM?
-        if (this.editListItemId == null) {
+    processEditItemRequest(itemIndex) {
+        this.model.loadItem(itemIndex);
+        this.model.goItem();
+    }
 
+    processSubmitItemChangesRequest() {
+        let descriptionTextField = document.getElementById("item_description");
+        let description = descriptionTextField.value;
+        let assignedToTextField = document.getElementById("item_assigned_to");
+        let assignedTo = assignedToTextField.value;
+        let dueDatePicker = document.getElementById("item_due_date");
+        let dueDate = dueDatePicker.value;
+        let completedCheckbox = document.getElementById("item_completed");
+        let completed = completedCheckbox.checked;
+        
+        // IS THIS AN EXISTING LIST ITEM?
+        if (this.model.isEditingItem()) {
+            this.model.updateEditedItem(description, assignedTo, dueDate, completed);
         }
-        // OR IS THIS JUST ONE BEING EDITED
+        // OR A NEW ONE
         else {
-            
+            this.model.updateNewItem(description, assignedTo, dueDate, completed);
         }
-        this.showElementWithId("todo_list_item", false);
-        this.showElementWithId("todo_list", true);
+
+        // CHANGE THE SCREEN
+        this.model.goList();
     }
 
-    processCancelItemChanges() {
-        this.showElementWithId("todo_list_item", false);
-        this.showElementWithId("todo_list", true);
+    processCancelItemChangesRequest() {
+        this.model.goList();
     }
 
-    displayListItems() {
-        let listItemsList = document.getElementById("list_items_list");
+    processMoveItemUpRequest(event, itemIndex) {
+        event.stopPropagation();
+        this.model.moveUp(itemIndex);
+    }
+
+    processMoveItemDownRequest(event, itemIndex) {
+        event.stopPropagation();
+        this.model.moveDown(itemIndex);
+    }
+
+    processDeleteItemRequest(event, itemIndex) {
+        event.stopPropagation();
+        this.model.deleteItem(itemIndex);
     }
 }

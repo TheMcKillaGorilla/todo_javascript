@@ -17,6 +17,7 @@ class TodoListTester {
                     let newItem = new TodoListItem();
                     newItem.setDescription(itemData.description);
                     newItem.setAssignedTo(itemData.assigned_to);
+                    newItem.setDueDate(itemData.due_date);
                     newItem.setCompleted(itemData.completed);
                     newList.addItem(newItem);
                 }

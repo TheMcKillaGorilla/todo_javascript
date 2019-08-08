@@ -42,26 +42,8 @@
         </div>
     </div>
 
-    <div id="top_toolbar" hidden>
-        <div id="file_toolbar" class="top_sub_toolbar">
-            <button id="home_button" onclick=window.todo.controller.processHomeRequest()></button>
-            <button id="new_button" onclick=window.todo.controller.processNewListRequest()></button>
-            <button id="undo_button" onclick=window.todo.controller.processUndoRequest()></button>
-            <button id="redo_button" onclick=window.todo.controller.processRedoRequest()></button>
-        </div>
-        <div id="cut_toolbar" class="top_sub_toolbar">
-            <button id="cut_button" onclick=window.todo.controller.processCutRequest()></button>
-            <button id="copy_button" onclick=window.todo.controller.processCopyRequest()></button>
-            <button id="paste_button" onclick=window.todo.controller.processPasteRequest()></button>
-        </div>
-        <div id="undo_toolbar" class="top_sub_toolbar">
-            <button id="undo_button" onclick=window.todo.controller.processUndoRequest()></button>
-            <button id="redo_button" onclick=window.todo.controller.processRedoRequest()></button>
-        </div>
-    </div>
-
     <div id="todo_list" hidden>
-        <div id="list_heading">@todo</div>
+        <div id="list_heading" onclick=window.todo.controller.processHomeRequest()>@todo</div>
         <div id="name_author_toolbar">
             <div class="text_toolbar">
                 <span id="list_name_prompt">Name:</span>
@@ -72,29 +54,22 @@
                 <input id="list_owner_input" />
             </div>
         </div>
-        <div id="list_items_toolbar">
-            <button id="new_item_button" onclick=window.todo.controller.processNewItemRequest()>+</button>
-            <button id="remove_item_button" onclick=window.todo.controller.processRemoveItemRequest()>-</button>
-            <button id="edit_item_button" onclick=window.todo.controller.processEditItemRequest()>...</button>
-            <button id="move_up_item_button" onclick=window.todo.controller.processMoveUpItemRequest()>Up</button>
-            <button id="move_down_item_button" onclick=window.todo.controller.processMoveDownItemRequest()>Down</button>
-        </div>
         <div id="list_items_list"></div>
     </div>
 
     <div id="todo_list_item" hidden>
         <h3 id="item_heading">Item</h3>
         <div id="todo_list_item_form">
-            <div class="todo_item_prompt">Name:</div><input id="item_name" class="todo_item_input" type="input" />
+            <div class="todo_item_prompt">Description:</div><input id="item_description" class="todo_item_input" type="input" />
             <div class="todo_item_prompt">Assigned To:</div><input id="item_assigned_to" class="todo_item_input"
                 type="input" />
             <div class="todo_item_prompt">Due Date:</div><input id="item_due_date" class="todo_item_input"
                 type="date" />
-            <div class="todo_item_prompt">Description:</div><input id="item_description" class="todo_item_input"
-                type="input" />
+            <div class="todo_item_prompt">Completed:</div><input id="item_completed" class="todo_item_input"
+                type="checkbox" />
         </div>
-        <button id="todo_item_submit_button" onclick=window.todo.controller.processSubmitItemChanges()>Submit</button>
-        <button id="todo_item_cancel_button" onclick=window.todo.controller.processCancelItemChanges()>Cancel</button>
+        <button id="todo_item_submit_button" onclick=window.todo.controller.processSubmitItemChangesRequest()>Submit</button>
+        <button id="todo_item_cancel_button" onclick=window.todo.controller.processCancelItemChangesRequest()>Cancel</button>
     </div>
 </body>
 

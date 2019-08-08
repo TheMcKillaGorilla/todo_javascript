@@ -26,7 +26,7 @@ class TodoListItem {
         this.assignedTo = initAssignedTo;
     }
 
-    getCompleted() {
+    isCompleted() {
         return this.completed;
     }
 
