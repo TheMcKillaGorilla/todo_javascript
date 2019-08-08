@@ -36,24 +36,24 @@ class TodoListModel {
 
     goHome() {
         // THIS COULD HAPPEN ANYWHERE SO HIDE ALL THE OTHERS
-        this.view.showElementWithId("todo_list", false);
-        this.view.showElementWithId("todo_list_item", false);
+        this.view.showElementWithId(TodoGUIId.TODO_LIST, false);
+        this.view.showElementWithId(TodoGUIId.TODO_ITEM, false);
 
         // AND GO HOME
-        this.view.showElementWithId("todo_home", true);        
+        this.view.showElementWithId(TodoGUIId.TODO_HOME, true);        
     }
 
     goList() {
         this.editListItemId = null;
 
         // THIS MIGHT HAVE OCCURED FROM HOME SO HIDE HOME
-        this.view.showElementWithId("todo_home", false);
+        this.view.showElementWithId(TodoGUIId.TODO_HOME, false);
 
         // OR FROM AN ITEM SO HIDE THE ITEM EDIT SCREEN
-        this.view.showElementWithId("todo_list_item", false);
+        this.view.showElementWithId(TodoGUIId.TODO_ITEM, false);
 
         // SHOW THE TOOLBAR AND LIST EDIT
-        this.view.showElementWithId("todo_list", true);
+        this.view.showElementWithId(TodoGUIId.TODO_LIST, true);
     }
 
     goEditList() {
@@ -62,11 +62,11 @@ class TodoListModel {
 
     goItem() {
         // THIS COULD HAPPEN ANYWHERE SO HIDE ALL THE OTHERS
-        this.view.showElementWithId("todo_list", false);
-        this.view.showElementWithId("todo_list_item", false);
+        this.view.showElementWithId(TodoGUIId.TODO_LIST, false);
+        this.view.showElementWithId(TodoGUIId.TODO_HOME, false);
 
         // AND GO HOME
-        this.view.showElementWithId("todo_list_item", true);  
+        this.view.showElementWithId(TodoGUIId.TODO_ITEM, true);  
     }
 
     loadNewItem() {

@@ -30,36 +30,57 @@ class TodoListView {
         }
     }
 
+    buildOpenTag(tagName) {
+        return "<" + tagName + ">";
+    }
+
+    buildCloseTag(tagName) {
+        return "</" + tagName + ">";
+    }
+
+    buildFunctionCallText(functionName, args) {
+        let functionCallText = functionName + "(";
+        for (let i = 0; i < args.length; i++) {
+            functionCallText += "'" + args[i] + "'";
+            if (i < (args.length-1)) {
+                functionCallText += ", ";
+            }
+        }
+        functionCallText += ")";
+        return functionCallText;
+    }
+
     buildListLink(listName) {
-        let newA = document.createElement('a');
+        let newA = document.createElement(TodoHTML.A);
         newA.setAttribute('href', '#');
         newA.innerHTML = listName;
-        let clickText = "window.todo.controller.processEditListRequest('" + listName + "')";
-        newA.setAttribute('onclick', clickText);
+        let callbackArguments = [listName];
+        let clickText = this.buildFunctionCallText(TodoCallback.PROCESS_EDIT_LIST_REQUEST, callbackArguments);
+        newA.setAttribute(TodoHTML.ONCLICK, clickText);
         return newA;
     }
 
     buildListItem(listItem, listItemIndex) {  
-        let newItemDiv = document.createElement('div');
-        newItemDiv.setAttribute('class', 'list_item_card');
+        let newItemDiv = document.createElement(TodoHTML.DIV);
+        newItemDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.ITEM_CARD);
         let clickText = "window.todo.controller.processEditItemRequest('" + listItemIndex + "')";
-        newItemDiv.setAttribute('onclick', clickText);
+        newItemDiv.setAttribute(TodoHTML.ONCLICK, clickText);
 
         // WE'LL PUT ITEMS INTO THIS CARD IN A GRID
-        let headingDiv = document.createElement('div');
-        headingDiv.setAttribute('class', 'list_item_card_heading');
+        let headingDiv = document.createElement(TodoHTML.DIV);
+        headingDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.ITEM_CARD_HEADING);
         headingDiv.innerHTML = listItem.getDescription();
 
-        let assignedToDiv = document.createElement('div');
-        assignedToDiv.setAttribute('class', 'list_item_card_details_1');
+        let assignedToDiv = document.createElement(TodoHTML.DIV);
+        assignedToDiv.setAttribute(TodoHTML.CLASS, 'list_item_card_details_1');
         assignedToDiv.innerHTML = '<strong>Assigned To: </strong>' + listItem.getAssignedTo();
 
-        let dueDateDiv = document.createElement('div');
-        dueDateDiv.setAttribute('class', 'list_item_card_details_2');
+        let dueDateDiv = document.createElement(TodoHTML.DIV);
+        dueDateDiv.setAttribute(TodoHTML.CLASS, 'list_item_card_details_2');
         dueDateDiv.innerHTML = '<strong>Due Date: </strong>' + listItem.getDueDate();
 
-        let completedDiv = document.createElement('div');
-        completedDiv.setAttribute('class', 'list_item_card_details_3');
+        let completedDiv = document.createElement(TodoHTML.DIV);
+        completedDiv.setAttribute(TodoHTML.CLASS, 'list_item_card_details_3');
         if (listItem.isCompleted()) {
             completedDiv.innerHTML += "<strong style='color:green'>Completed</strong>";
         }
@@ -67,23 +88,23 @@ class TodoListView {
             completedDiv.innerHTML += "<strong style='color:red'>Pending</strong>";
         }
         
-        let itemToolbar = document.createElement('div');
-        itemToolbar.setAttribute('class', 'list_item_card_toolbar');
-        let moveDownButton = document.createElement('span');
-        moveDownButton.setAttribute('class', 'list_item_card_button');        
-        moveDownButton.innerHTML = "&#x21e9;";
+        let itemToolbar = document.createElement(TodoHTML.DIV);
+        itemToolbar.setAttribute(TodoHTML.CLASS, 'list_item_card_toolbar');
+        let moveDownButton = document.createElement(TodoHTML.SPAN);
+        moveDownButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.TODO_ITEM_CARD_BUTTON);        
+        moveDownButton.innerHTML = TodoSymbols.MOVE_DOWN;
         clickText = "window.todo.controller.processMoveItemDownRequest(event, '" + listItemIndex + "')";
-        moveDownButton.setAttribute('onclick', clickText);
-        let moveUpButton = document.createElement('span');
-        moveUpButton.setAttribute('class', 'list_item_card_button');
-        moveUpButton.innerHTML = "&#x21e7;";
+        moveDownButton.setAttribute(TodoHTML.ONCLICK, clickText);
+        let moveUpButton = document.createElement(TodoHTML.SPAN);
+        moveUpButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.TODO_ITEM_CARD_BUTTON);
+        moveUpButton.innerHTML = TodoSymbols.MOVE_UP;
         clickText = "window.todo.controller.processMoveItemUpRequest(event, '" + listItemIndex + "')";
-        moveUpButton.setAttribute('onclick', clickText);
-        let deleteButton = document.createElement('span');
-        deleteButton.setAttribute('class', 'list_item_card_button');
-        deleteButton.innerHTML = "&#10005;";
+        moveUpButton.setAttribute(TodoHTML.ONCLICK, clickText);
+        let deleteButton = document.createElement(TodoHTML.SPAN);
+        deleteButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.TODO_ITEM_CARD_BUTTON);
+        deleteButton.innerHTML = TodoSymbols.DELETE;
         clickText = "window.todo.controller.processDeleteItemRequest(event, '" + listItemIndex + "')";
-        deleteButton.setAttribute('onclick', clickText);
+        deleteButton.setAttribute(TodoHTML.ONCLICK, clickText);
         itemToolbar.appendChild(moveDownButton);
         itemToolbar.appendChild(moveUpButton);
         itemToolbar.appendChild(deleteButton);
@@ -99,15 +120,16 @@ class TodoListView {
     }
 
     buildAddListItem() {  
-        let newItemDiv = document.createElement('div');
-        newItemDiv.setAttribute('class', 'list_item_card');
-        let clickText = "window.todo.controller.processNewItemRequest()";
-        newItemDiv.setAttribute('onclick', clickText);
+        let newItemDiv = document.createElement(TodoHTML.DIV);
+        newItemDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.TODO_ITEM_CARD);
+        let callbackArguments = [];
+        let clickText = this.buildFunctionCallText(TodoCallback.PROCESS_NEW_ITEM_REQUEST, callbackArguments);
+        newItemDiv.setAttribute(TodoHTML.ONCLICK, clickText);
 
         // WE'LL PUT ITEMS INTO THIS CARD IN A GRID
-        let plusDiv = document.createElement('div');
-        plusDiv.setAttribute('class', 'list_item_card_plus');
-        plusDiv.innerHTML = "+";
+        let plusDiv = document.createElement(TodoHTML.DIV);
+        plusDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.TODO_ITEM_PLUS_CARD);
+        plusDiv.innerHTML = TodoSymbols.PLUS;
 
         // THESE THREE SPANS GO IN THE DETAILS DIV
         newItemDiv.appendChild(plusDiv);
@@ -116,29 +138,28 @@ class TodoListView {
     }
     
     loadListLinks(todoLists) {
-        let linksText = "";
-        let yourListList = document.getElementById("your_list_list");
+        let yourListList = document.getElementById(TodoGUIId.HOME_YOUR_LISTS_LIST);
         this.removeAllChildren(yourListList);
         for (let i = 0; i < todoLists.length; i++) {
             let todoList = todoLists[i];
             let listName = todoList.getName();
             let newA = this.buildListLink(listName);
             yourListList.appendChild(newA);
-            let newBr = document.createElement('br');
+            let newBr = document.createElement(TodoHTML.BR);
             yourListList.appendChild(newBr);
         }
     }
 
     loadListData(listToLoad) {
-        let listNameTextField = document.getElementById("list_name_input");
+        let listNameTextField = document.getElementById(TodoGUIId.LIST_NAME_TEXTFIELD);
         listNameTextField.value = listToLoad.getName();
-        let listOwnerTextField = document.getElementById("list_owner_input");
+        let listOwnerTextField = document.getElementById(TodoGUIId.LIST_OWNER_TEXTFIELD);
         listOwnerTextField.value = listToLoad.getOwner();
         this.loadItems(listToLoad);
     }
 
     loadItems(listToLoad) {
-        let listItemsDiv = document.getElementById("list_items_list");
+        let listItemsDiv = document.getElementById(TodoGUIId.LIST_LIST_ITEMS_CONTAINER);
         this.removeAllChildren(listItemsDiv);
 
         // LOAD THE ADD ITEM CARD
@@ -154,13 +175,13 @@ class TodoListView {
     }
 
     loadItemData(itemToLoad) {
-        let descriptionTextField = document.getElementById("item_description");
+        let descriptionTextField = document.getElementById(TodoGUIId.ITEM_DESCRIPTION_TEXTFIELD);
         descriptionTextField.value = itemToLoad.getDescription();
-        let assignedToTextField = document.getElementById("item_assigned_to");
+        let assignedToTextField = document.getElementById(TodoGUIId.ITEM_ASSIGNED_TO_TEXTFIELD);
         assignedToTextField.value = itemToLoad.getAssignedTo();
-        let dueDatePicker = document.getElementById("item_due_date");
+        let dueDatePicker = document.getElementById(TodoGUIId.ITEM_DUE_DATE_PICKER);
         dueDatePicker.value = itemToLoad.getDueDate();
-        let completedCheckbox = document.getElementById("item_completed");
+        let completedCheckbox = document.getElementById(TodoGUIId.ITEM_COMPLETED_CHECKBOX);
         completedCheckbox.checked = itemToLoad.isCompleted();
     }
 }
