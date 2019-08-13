@@ -59,6 +59,90 @@
                     "completed": false
                 }
             ]
+        },
+        {
+            "name": "Courses to Take",
+            "owner": "Joe Student",
+            "items": [
+                {
+                    "description": "CSE 114",
+                    "due_date": "2018-12-31",
+                    "assigned_to": "Joe",
+                    "completed": true
+                },
+                {
+                    "description": "CSE 215",
+                    "due_date": "2018-12-31",
+                    "assigned_to": "Joe",
+                    "completed": true
+                },
+                {
+                    "description": "AMS 301",
+                    "due_date": "2018-12-31",
+                    "assigned_to": "Joe",
+                    "completed": true
+                },
+                {
+                    "description": "CSE 214",
+                    "due_date": "2019-05-31",
+                    "assigned_to": "Joe",
+                    "completed": true
+                },
+                {
+                    "description": "AMS 310",
+                    "due_date": "2019-05-31",
+                    "assigned_to": "Joe",
+                    "completed": true
+                },
+                {
+                    "description": "CSE 216",
+                    "due_date": "2019-12-31",
+                    "assigned_to": "Joe",
+                    "completed": false
+                },
+                {
+                    "description": "CSE 220",
+                    "due_date": "2019-12-31",
+                    "assigned_to": "Joe",
+                    "completed": false
+                },
+                {
+                    "description": "CSE 316",
+                    "due_date": "2020-05-31",
+                    "assigned_to": "Joe",
+                    "completed": false
+                },
+                {
+                    "description": "CSE 303",
+                    "due_date": "2020-05-31",
+                    "assigned_to": "Joe",
+                    "completed": false
+                },
+                {
+                    "description": "CSE 380",
+                    "due_date": "2020-05-31",
+                    "assigned_to": "Joe",
+                    "completed": false
+                },
+                {
+                    "description": "CSE 373",
+                    "due_date": "2020-12-31",
+                    "assigned_to": "Joe",
+                    "completed": false
+                },
+                {
+                    "description": "CSE 381",
+                    "due_date": "2020-12-31",
+                    "assigned_to": "Joe",
+                    "completed": false
+                },
+                {
+                    "description": "CSE 416",
+                    "due_date": "2020-12-31",
+                    "assigned_to": "Joe",
+                    "completed": false
+                }
+            ]
         }
     ]
 }

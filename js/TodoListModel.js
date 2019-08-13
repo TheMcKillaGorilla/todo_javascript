@@ -5,14 +5,29 @@ class TodoListModel {
         // WE DON'T HAVE A DATABASE SO WE NEED TO KEEP
         // ALL OF THE LISTS WE MAKE HERE
         this.todoLists = new Array();
+
+        this.listToEdit = null;
+    }
+
+    setListToEdit(initListToEdit) {
+        this.listToEdit = initListToEdit;
+        if (this.listToEdit) {
+            this.moveListToTop(this.listToEdit);            
+            this.view.loadListData(this.listToEdit);
+        }
     }
 
     isEditingItem() {
         return this.editItem != null;
     }
 
-    addList(listToAdd) {
-        this.todoLists.push(listToAdd);
+    appendList(listToAppend) {
+        this.todoLists.push(listToAppend);
+        this.view.appendListLink(listToAppend);
+    }
+
+    prependList(listToPrepend) {
+        this.todoLists.unshift(listToPrepend);
         this.view.loadListLinks(this.todoLists);
     }
 
@@ -29,9 +44,7 @@ class TodoListModel {
         this.removeList(listToMove);
 
         // AND THEN ADD IT TO THE TOP OF THE STACK
-        this.addNewList(listToMove);
-
-        this.view.loadListLinks();
+        this.prependList(listToMove);
     }
 
     goHome() {
@@ -44,8 +57,6 @@ class TodoListModel {
     }
 
     goList() {
-        this.editListItemId = null;
-
         // THIS MIGHT HAVE OCCURED FROM HOME SO HIDE HOME
         this.view.showElementWithId(TodoGUIId.TODO_HOME, false);
 
@@ -54,10 +65,6 @@ class TodoListModel {
 
         // SHOW THE TOOLBAR AND LIST EDIT
         this.view.showElementWithId(TodoGUIId.TODO_LIST, true);
-    }
-
-    goEditList() {
-
     }
 
     goItem() {
@@ -127,9 +134,23 @@ class TodoListModel {
         this.listToEdit.addItem(this.newItem);
         this.updateItem(this.newItem, description, assignedTo, dueDate, completed);
     }
+
+    updateListName(listBeingEdited, newName) {
+        // WE'RE GOING TO CHANGE THE NAME TOO BUT ONLY UPDATE
+        // THE LIST OF LIST LINKS IF IT'S CHANGED
+        if (listBeingEdited.getName() != newName) {
+            listBeingEdited.setName(newName);
+            this.view.loadListLinks(this.todoLists);
+        }
+    }
+
+    updateListOwner(listBeingEdited, newOwner) {
+        listBeingEdited.setOwner(newOwner);
+    }
         
     loadNewList() {
         this.listToEdit = new TodoList();
+        this.prependList(this.listToEdit);
         this.view.loadListData(this.listToEdit);
     }
 
@@ -145,8 +166,52 @@ class TodoListModel {
         }
 
         if (listToLoad != null) {
-            this.listToEdit = listToLoad;
-            this.view.loadListData(listToLoad);
+            this.setListToEdit(listToLoad);
+        }
+    }
+
+    sortTasks(sortingCriteria) {
+        this.currentItemSortCriteria = sortingCriteria;
+        this.listToEdit.items.sort(this.compare);
+        this.view.loadItems(this.listToEdit);
+    }
+
+    isCurrentItemSortCriteria(testCriteria) {
+        return this.currentItemSortCriteria === testCriteria;
+    }
+
+    compare(item1, item2) {
+        let thisModel = window.todo.model;
+        if (thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_TASK_DECREASING)
+            || thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING)
+            || thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_STATUS_DECREASING)) {
+            let temp = item1;
+            item1 = item2;
+            item2 = temp;
+        }
+        if (thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_TASK_INCREASING)) {
+            if (item1.getDescription() < item2.getDescription())
+                return -1;
+            else if (item1.getDescription() > item2.getDescription())
+                return 1;
+            else
+                return 0;
+        }
+        else if (thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING)) {
+            if (item1.getDueDate() < item2.getDueDate())
+                return -1;
+            else if (item1.getDueDate() > item2.getDueDate())
+                return 1;
+            else
+                return 0;
+        }
+        else {
+            if (item1.isCompleted() < item2.isCompleted())
+                return -1;
+            else if (item1.isCompleted() > item2.isCompleted())
+                return 1;
+            else
+                return 0;
         }
     }
 }

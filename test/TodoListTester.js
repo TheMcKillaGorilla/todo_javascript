@@ -21,7 +21,7 @@ class TodoListTester {
                     newItem.setCompleted(itemData.completed);
                     newList.addItem(newItem);
                 }
-                window.todo.model.addList(newList);
+                window.todo.model.appendList(newList);
             }
         });
     }
