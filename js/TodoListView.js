@@ -1,23 +1,69 @@
+'use strict'
+/**
+ * TodoListView.js
+ * 
+ * This class deals with the view of our Web application providing services
+ * for loading data into our controls and building other UI controls.
+ * 
+ * @author McKilla Gorilla
+ * @author ?
+ */
 class TodoListView {
+    /**
+     * This constructor initializes the view, keeping the model it will
+     * use to pull data from to update the view.
+     * 
+     * @param {TodoListModel} initModel 
+     */
     constructor(initModel) {
         this.model = initModel;
     }
 
+    /**
+     * Helper method for making and returning an HTML open tag.
+     * 
+     * @param {String} tagName HTML type of tag to make.
+     */
+    buildOpenTag(tagName) {
+        return "<" + tagName + ">";
+    }
+
+    /**
+     * Helper method for making and returing an HTML close tag.
+     * 
+     * @param {String} tagName HTML type of tag to make.
+     */
+    buildCloseTag(tagName) {
+        return "</" + tagName + ">";
+    }
+
+    /**
+     * This method builds a and returns a DIV for the add list item button.
+     */
     buildAddListItem() {
         // WE'LL PUT ITEMS INTO THIS CARD IN A GRID
         let addItemDiv = document.createElement(TodoHTML.DIV);
         addItemDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_ADD_CARD);
         addItemDiv.innerHTML = TodoSymbols.PLUS;
         let callbackArguments = [];
-        this.setupCallback(addItemDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_NEW_ITEM_REQUEST, callbackArguments);
+        this.setupCallback(addItemDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_CREATE_NEW_ITEM, callbackArguments);
         return addItemDiv;
     }
 
+    /**
+     * This function builds and returns a DIV for a card in the list. A card
+     * is a row in the list that we can interact with and contains information about
+     * the list item.
+     * 
+     * @param {TodoListItem} listItem Item in the list to build card for.
+     * @param {Number} listItemIndex Index location in the list of the item.
+     */
     buildListItem(listItem, listItemIndex) {
         let newItemDiv = document.createElement(TodoHTML.DIV);
+        newItemDiv.setAttribute(TodoHTML.ID, TodoGUIId.ITEM_CARD_ + listItemIndex);
         newItemDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD);
         let itemArgs = [listItemIndex];
-        this.setupCallback(newItemDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_EDIT_ITEM_REQUEST, itemArgs);
+        this.setupCallback(newItemDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_EDIT_ITEM, itemArgs);
 
         // WE'LL PUT ITEMS INTO THIS CARD IN A GRID
         let descriptionDiv = document.createElement(TodoHTML.DIV);
@@ -46,23 +92,29 @@ class TodoListView {
         let itemToolbar = document.createElement(TodoHTML.DIV);
         itemToolbar.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_TOOLBAR);
 
-        let moveDownButton = document.createElement(TodoHTML.SPAN);
-        moveDownButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_BUTTON);
-        moveDownButton.innerHTML = TodoSymbols.MOVE_DOWN;
-        this.setupCallback(moveDownButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_DOWN_REQUEST, itemArgs);
-
         let moveUpButton = document.createElement(TodoHTML.SPAN);
+        let moveUpButtonId = TodoGUIId.ITEM_CARD_ + listItemIndex + TodoGUIId._MOVE_UP_BUTTON;
+        moveUpButton.setAttribute(TodoHTML.ID, moveUpButtonId);
         moveUpButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_BUTTON);
         moveUpButton.innerHTML = TodoSymbols.MOVE_UP;
-        this.setupCallback(moveUpButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_UP_REQUEST, itemArgs);
+        this.setupCallback(moveUpButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_UP, itemArgs);
+
+        let moveDownButton = document.createElement(TodoHTML.SPAN);
+        let moveDownButtonId = TodoGUIId.ITEM_CARD_ + listItemIndex + TodoGUIId._MOVE_DOWN_BUTTON;
+        moveDownButton.setAttribute(TodoHTML.ID, moveDownButtonId);        
+        moveDownButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_BUTTON);
+        moveDownButton.innerHTML = TodoSymbols.MOVE_DOWN;
+        this.setupCallback(moveDownButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_DOWN, itemArgs);
 
         let deleteButton = document.createElement(TodoHTML.SPAN);
+        let deleteButtonId = TodoGUIId.ITEM_CARD_ + listItemIndex + TodoGUIId._DELETE_BUTTON;
+        deleteButton.setAttribute(TodoHTML.ID, deleteButtonId);        
         deleteButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_BUTTON);
         deleteButton.innerHTML = TodoSymbols.DELETE;
-        this.setupCallback(deleteButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_DELETE_ITEM_REQUEST, itemArgs);
+        this.setupCallback(deleteButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_DELETE_ITEM, itemArgs);
 
-        itemToolbar.appendChild(moveDownButton);
         itemToolbar.appendChild(moveUpButton);
+        itemToolbar.appendChild(moveDownButton);
         itemToolbar.appendChild(deleteButton);
 
         // THESE THREE SPANS GO IN THE DETAILS DIV
@@ -75,6 +127,10 @@ class TodoListView {
         return newItemDiv;
     }
 
+    /**
+     * This function builds and returns a DIV with the header in the
+     * table of cards for the todo list.
+     */
     buildListItemsHeader() {
         // WE'LL PUT ITEMS INTO THIS CARD IN A GRID
         let listItemHeaderDiv = document.createElement(TodoHTML.DIV);
@@ -85,17 +141,17 @@ class TodoListView {
         taskHeaderDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_TASK_HEADER);
         taskHeaderDiv.innerHTML = "Task";
         let callbackArguments = [];
-        this.setupCallback(taskHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_TASK_REQUEST, callbackArguments);
+        this.setupCallback(taskHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_TASK, callbackArguments);
 
         let dueDateHeaderDiv = document.createElement(TodoHTML.DIV);
         dueDateHeaderDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_DUE_DATE_HEADER);
         dueDateHeaderDiv.innerHTML = 'Due Date';
-        this.setupCallback(dueDateHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_DUE_DATE_REQUEST, callbackArguments);
+        this.setupCallback(dueDateHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_DUE_DATE, callbackArguments);
 
         let statusHeaderDiv = document.createElement(TodoHTML.DIV);
         statusHeaderDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_STATUS_HEADER);
         statusHeaderDiv.innerHTML = 'Status';
-        this.setupCallback(statusHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_STATUS_REQUEST, callbackArguments);
+        this.setupCallback(statusHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_STATUS, callbackArguments);
 
         // THESE THREE SPANS GO IN THE DETAILS DIV
         listItemHeaderDiv.appendChild(taskHeaderDiv);
@@ -104,6 +160,12 @@ class TodoListView {
         return listItemHeaderDiv;
     }
 
+    /**
+     * This method is for building and returning a link on the front page
+     * of the app. One will be built for each list.
+     * 
+     * @param {String} listName Name of the list to appear in the link.
+     */
     buildListLink(listName) {
         let newA = document.createElement(TodoHTML.A);
         newA.setAttribute(TodoHTML.CLASS, TodoGUIClass.HOME_LIST_LINK);
@@ -112,10 +174,18 @@ class TodoListView {
         let br = document.createElement(TodoHTML.BR);
         newA.appendChild(br);
         let callbackArguments = [listName];
-        this.setupCallback(newA, TodoHTML.ONCLICK, TodoCallback.PROCESS_EDIT_LIST_REQUEST, callbackArguments);
+        this.setupCallback(newA, TodoHTML.ONCLICK, TodoCallback.PROCESS_EDIT_LIST, callbackArguments);
         return newA;
     }
 
+    /**
+     * This method is for taking the data out of the itemToLoad
+     * object and putting it into controls that will allow the user
+     * to edit the data.
+     * 
+     * @param {TodoListItem} itemToLoad The item that is to be edited and
+     * so is to have its data loaded into the controls.
+     */
     loadItemData(itemToLoad) {
         let descriptionTextField = document.getElementById(TodoGUIId.ITEM_DESCRIPTION_TEXTFIELD);
         descriptionTextField.value = itemToLoad.getDescription();
@@ -127,6 +197,12 @@ class TodoListView {
         completedCheckbox.checked = itemToLoad.isCompleted();
     }
 
+    /**
+     * This method is for taking the list item data out of the listToLoad
+     * object and putting it into controls in the list screen.
+     * 
+     * @param {TodoList} listToLoad 
+     */
     loadItems(listToLoad) {
         let listItemsDiv = document.getElementById(TodoGUIId.LIST_ITEMS_CONTAINER);
         this.removeAllChildren(listItemsDiv);
@@ -146,6 +222,12 @@ class TodoListView {
         listItemsDiv.appendChild(addCard);
     }
 
+    /**
+     * This method is for taking the data out of the listToLoad
+     * object and putting it into the appropriate controls in the list screen.
+     * 
+     * @param {TodoList} listToLoad 
+     */
     loadListData(listToLoad) {
         let listNameTextField = document.getElementById(TodoGUIId.LIST_NAME_TEXTFIELD);
         listNameTextField.value = listToLoad.getName();
@@ -154,15 +236,13 @@ class TodoListView {
         this.loadItems(listToLoad);
     }
 
-    appendListLink(listToAppend) {
-        let yourListsList = document.getElementById(TodoGUIId.HOME_YOUR_LISTS_LIST);
-        let listName = listToAppend.getName();
-        let newA = this.buildListLink(listName);
-        yourListsList.appendChild(newA);
-        let newBr = document.createElement(TodoHTML.BR);
-        yourListsList.appendChild(newBr);
-    }
-
+    /**
+     * This method goes through all the todo lists managed by this application
+     * and one at time extracts the name of each and then creates a link for
+     * each on the welcome page such that the user may edit one of them.
+     * 
+     * @param {Array} todoLists 
+     */
     loadListLinks(todoLists) {
         let yourListsList = document.getElementById(TodoGUIId.HOME_YOUR_LISTS_LIST);
         this.removeAllChildren(yourListsList);
@@ -172,6 +252,25 @@ class TodoListView {
         }
     }
 
+    /**
+     * This method appends a link to the welcome page for the listToAppend argument provided.
+     * 
+     * @param {TodoList} listToAppend 
+     */
+    appendListLink(listToAppend) {
+        let yourListsList = document.getElementById(TodoGUIId.HOME_YOUR_LISTS_LIST);
+        let listName = listToAppend.getName();
+        let newA = this.buildListLink(listName);
+        yourListsList.appendChild(newA);
+        let newBr = document.createElement(TodoHTML.BR);
+        yourListsList.appendChild(newBr);
+    }
+
+    /**
+     * This method goes through the node argument and removes all its child nodes.
+     * 
+     * @param {Node} node 
+     */
     removeAllChildren(node) {
         if (!node)
             console.log("WHAT?");
@@ -182,6 +281,17 @@ class TodoListView {
         }
     }
 
+    /**
+     * This method sets up a callback method for an element, registering the
+     * elementCallbackName (e.g. click) function for the element control in the DOM, specifying
+     * callbackFunctionName as the method to be called when that event occurs. The
+     * args array is used to pass needed data to the callback.
+     * 
+     * @param {Element} element 
+     * @param {String} elementCallbackName 
+     * @param {String} callbackFunctionName 
+     * @param {String[]} args 
+     */
     setupCallback(element, elementCallbackName, callbackFunctionName, args) {
         let functionCallText = callbackFunctionName + "(";
         for (let i = 0; i < args.length; i++) {
@@ -195,6 +305,12 @@ class TodoListView {
         return functionCallText;
     }
 
+    /**
+     * This method is for toggling the element argument to show it or hide it.
+     * 
+     * @param {Element} element 
+     * @param {Boolean} show 
+     */
     showElement(element, show) {
         if (!element)
             console.log("WHAT?");
@@ -211,55 +327,78 @@ class TodoListView {
         }
     }
 
+    /**
+     * This method is for toggling the element in the DOM with the elementId id to
+     * show it or hide it.
+     * 
+     * @param {String} elementId 
+     * @param {Boolean} show 
+     */
     showElementWithId(elementId, show) {
         let element = document.getElementById(elementId);
         this.showElement(element, show);
     }
 
-    buildOpenTag(tagName) {
-        return "<" + tagName + ">";
-    }
-
-    buildCloseTag(tagName) {
-        return "</" + tagName + ">";
-    }
-
+    /**
+     * This method is for hiding the yes/no dialog.
+     */
     hideDialog() {
-        let dialog = document.getElementById("modal1");
-        dialog.classList.remove("is-visible");
+        let dialog = document.getElementById(TodoGUIId.MODAL_YES_NO_DIALOG);
+        dialog.classList.remove(TodoGUIClass.IS_VISIBLE);
     }
 
+    /**
+     * This method is for showing the yes/no dialog.
+     */
     showDialog() {
-        let dialog = document.getElementById("modal1");
-        dialog.classList.add("is-visible");
-/*        const openEls = document.querySelectorAll("[data-open]");
-        const closeEls = document.querySelectorAll("[data-close]");
-        const isVisible = "is-visible";
+        let dialog = document.getElementById(TodoGUIId.MODAL_YES_NO_DIALOG);
+        dialog.classList.add(TodoGUIClass.IS_VISIBLE);
+    }
 
-        for (const el of openEls) {
-            el.addEventListener("click", function () {
-                const modalId = this.dataset.open;
-                document.getElementById(modalId).classList.add(isVisible);
-            });
-        }
+    /**
+     * This function can be used to disable on of the three buttons for each
+     * list item, which are for moving an item up or down or for removing it.
+     * 
+     * @param {Number} itemIndex 
+     * @param {TodoGUIId} buttonType 
+     */
+    disableButton(itemIndex, buttonType) {
+        let buttonId = TodoGUIId.ITEM_CARD_ + itemIndex + buttonType;
+        let button = document.getElementById(buttonId);
+        button.classList.add(TodoGUIClass.DISABLED);        
+    }
 
-        for (const el of closeEls) {
-            el.addEventListener("click", function () {
-                this.parentElement.parentElement.parentElement.classList.remove(isVisible);
-            });
-        }
+    /**
+     * This function can be used to enable one of the three buttons for each
+     * list item, which are for moving an item up or down or for removing it.
+     * 
+     * @param {Number} itemIndex 
+     * @param {TodoGUIId} buttonType 
+     */
+    enableButton(itemIndex, buttonType) {
+        let buttonId = TodoGUIId.ITEM_CARD_ + itemIndex + buttonType;
+        let button = document.getElementById(buttonId);
+        button.classList.remove(TodoGUIClass.DISABLED);        
+    }
 
-        document.addEventListener("click", e => {
-            if (e.target == document.querySelector(".modal.is-visible")) {
-                document.querySelector(".modal.is-visible").classList.remove(isVisible);
+    /**
+     * This method is for enabling/disabling all application controls depending
+     * on whether they are currently usable or not depending on application
+     * state data.
+     */
+    updateFoolproofItemCardControls() {
+        // MAKE SURE WE DISABLE THE MOVE UP BUTTON
+        // FOR THE TOP ITEM
+        let numItems = window.todo.model.getNumItems();
+        if (numItems > 0) {
+            this.disableButton(0, TodoGUIId._MOVE_UP_BUTTON);
+            let lastIndex = numItems - 1;
+            this.disableButton(lastIndex, TodoGUIId._MOVE_DOWN_BUTTON);
+            
+            if (numItems > 1) {
+                this.enableButton(1, TodoGUIId._MOVE_UP_BUTTON);
+                this.enableButton(lastIndex-1, TodoGUIId._MOVE_DOWN_BUTTON);
             }
-        });
-
-        document.addEventListener("keyup", e => {
-            // if we press the ESC
-            if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
-                document.querySelector(".modal.is-visible").classList.remove(isVisible);
-            }
-        });*/
+        }
     }
 }
